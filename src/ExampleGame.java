@@ -21,6 +21,7 @@ class ExampleGame {
 
     private Scene myScene;
     private ImageView myBouncer;
+    private ImageView mySmiley;
     private Rectangle myTopBlock;
     private Rectangle myBottomBlock;
 
@@ -41,9 +42,13 @@ class ExampleGame {
         // Create a place to see the shapes
         myScene = new Scene(root, width, height, Color.WHITE);
         // Make some shapes and set their properties
-        Image image = new Image(getClass().getClassLoader().getResourceAsStream("duke.gif"));
-        myBouncer = new ImageView(image);
+        Image dukeimage = new Image(getClass().getClassLoader().getResourceAsStream("duke.gif"));
+        myBouncer = new ImageView(dukeimage);
+        Image smileyicon = new Image(getClass().getClassLoader().getResourceAsStream("duke.gif"));
+        mySmiley = new ImageView(smileyicon);
         // x and y represent the top left corner, so center it
+        mySmiley.setX(width / 2 - mySmiley.getBoundsInLocal().getWidth() / 2);
+        mySmiley.setY(height / 2  - mySmiley.getBoundsInLocal().getHeight() / 2);
         myBouncer.setX(width / 2 - myBouncer.getBoundsInLocal().getWidth() / 2);
         myBouncer.setY(height / 2  - myBouncer.getBoundsInLocal().getHeight() / 2);
         myTopBlock = new Rectangle(width / 2 - 25, height / 2 - 100, 50, 50);

@@ -19,7 +19,7 @@ public class Main extends Application {
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
-    private ExampleGame myGame;
+    private DodgeGameRunner myGame;
 
 
     /**
@@ -28,7 +28,7 @@ public class Main extends Application {
     @Override
     public void start (Stage s) {
         // create your own game here
-        myGame = new ExampleGame();
+        myGame = new DodgeGameRunner();
         s.setTitle(myGame.getTitle());
 
         // attach game to the stage and display it
@@ -43,6 +43,13 @@ public class Main extends Application {
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
+        //sets a loop to create and destroy blocks
+        KeyFrame frame2 = new KeyFrame(Duration.millis(1000),//2000
+                e -> myGame.blockStep(5));//10
+        Timeline animation2 = new Timeline();
+        animation2.setCycleCount(Timeline.INDEFINITE);
+        animation2.getKeyFrames().add(frame2);
+        animation2.play();
     }
 
     /**
@@ -50,5 +57,11 @@ public class Main extends Application {
      */
     public static void main (String[] args) {
         launch(args);
+    }
+    public int getHeight(){
+    	return HEIGHT;
+    }
+    public int getWidth(){
+    	return WIDTH;
     }
 }
