@@ -14,6 +14,8 @@ public class BasicBlock {
 	private int myMidpoint;
 	private static final int BLOCKWIDTH = 50;
     private Rectangle myTop;
+    private boolean marked = false; //TODO: Change to hasPassed
+    private boolean touched = false;
     private Rectangle myBottom;
     private Group root;
 
@@ -52,5 +54,25 @@ public class BasicBlock {
 	public void setColorRed(){
 		myTop.setFill(Color.RED);
 		myBottom.setFill(Color.RED);
+	}
+	public void setColorGray(){
+		myTop.setFill(Color.GRAY);
+		myBottom.setFill(Color.GRAY);
+	}
+	public void setColorTransparent(){
+		myTop.setFill(Color.TRANSPARENT);
+		myBottom.setFill(Color.TRANSPARENT);
+	}
+	public void mark(){
+		marked = true;
+	}
+	public boolean isMarked(){
+		return marked;
+	}
+	public void touch(){
+		touched = true;
+	}
+	public boolean wasTouched(){
+		return touched;
 	}
 }

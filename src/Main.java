@@ -20,36 +20,15 @@ public class Main extends Application {
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 
     private DodgeGameRunner myGame;
-
+    private StartMenu startMenu;
 
     /**
      * Set things up at the beginning.
      */
     @Override
     public void start (Stage s) {
-        // create your own game here
-        myGame = new DodgeGameRunner();
-        s.setTitle(myGame.getTitle());
-
-        // attach game to the stage and display it
-        Scene scene = myGame.init(WIDTH, HEIGHT);
-        s.setScene(scene);
-        s.show();
-
-        // sets the game's loop
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-                                      e -> myGame.step(SECOND_DELAY));
-        Timeline animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-        //sets a loop to create and destroy blocks
-        KeyFrame frame2 = new KeyFrame(Duration.millis(1000),//2000
-                e -> myGame.blockStep(5));//10
-        Timeline animation2 = new Timeline();
-        animation2.setCycleCount(Timeline.INDEFINITE);
-        animation2.getKeyFrames().add(frame2);
-        animation2.play();
+    	//open the start menu
+    	startMenu = new StartMenu(s);	
     }
 
     /**

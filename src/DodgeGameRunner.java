@@ -1,6 +1,9 @@
 import java.awt.TextField;
 import java.util.ArrayList;
 import java.util.Timer;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -10,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 /**
@@ -22,15 +27,26 @@ class DodgeGameRunner {
     public static final int KEY_INPUT_SPEED = 15;
     private double elapsedBlockTime;
     private int score;
+    private int lives = 3;
     private int entrywidth;
     private int midpoint = Main.HEIGHT/2;
-
-    private Scene myScene;
+    private Stage s;
+    private int finalScore;
+    private GameOverMenu gameOverScreen;
     private Smiley myCharacter;
     private BasicBlock block;
     private BlockManager block_manage;
-    private ScoreDisplay score_display;
-
+    private StatsDisplay stats;
+    private Group root;
+    public static final int FRAMES_PER_SECOND = 60;
+    private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+    private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+//    private Timeline animation;
+//    private Timeline animationBlock;
+    
+    public DodgeGameRunner(Stage stage){
+    	s = stage;
+    }
     /**
      * Returns name of the game.
      */
@@ -44,16 +60,15 @@ class DodgeGameRunner {
     public Scene init (int width, int height) {
     	score = 0;
         // Create a scene graph to organize the scene
-        Group root = new Group();
+        root = new Group();
         
         // Create a place to see the shapes
-        myScene = new Scene(root, width, height, Color.WHITE);
+        Scene myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
+        stats = new StatsDisplay(root);
         myCharacter = new Smiley(root);
         block_manage = new BlockManager(root);
-        score_display = new ScoreDisplay(root);
-        
         // order added to the group is the order in which they are drawn
         // Respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
@@ -69,7 +84,9 @@ class DodgeGameRunner {
      */
     public void step (double elapsedTime) {
         block_manage.updatePositions();
-        block_manage.checkForCollision(myCharacter.getBounds());
+        if(block_manage.checkForCollision(myCharacter.getBounds())){stats.loseLife();}
+        if(stats.getLives()==0){finalScore = stats.getScore(); gameOver();}
+        if(block_manage.rightAbove(myCharacter.getX())){stats.setScore(stats.getScore()+1);}
     }
     public void blockStep (double elapsedTime) {
     	//generate random parameters for Block
@@ -80,10 +97,16 @@ class DodgeGameRunner {
     	}
     	midpoint = tempmidpoint;
         block_manage.addBlock(midpoint,entrywidth);
-        //score_display.setScore(score_display.getScore()+1);
         block_manage.removeUneededBlocks();
     }
-
+    public void gameOver(){
+    	//update scene to gameOver menu
+//    	root.setVisible(false);
+//    	root.getChildren().clear();
+    	StartMenu.stopAnimation();
+    	s.close();
+    	gameOverScreen = new GameOverMenu(s,finalScore);
+    }
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {
         switch (code) {

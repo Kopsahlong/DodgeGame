@@ -33,18 +33,37 @@ public class BlockManager {
 			block.setAxisLoc(block.getAxisLoc()-BLOCK_SPEED);
 		}
 	}
-
+	//check to see if a block is right above the smiley
+	public boolean rightAbove(int SmileyAxisLoc){
+		//this will update the score multiple times but we will have a way to check for that
+		for(BasicBlock block : blocks){
+			if(Math.abs(block.getAxisLoc()-SmileyAxisLoc)<=1&&!block.isMarked()){
+				block.setColorGray();
+				block.mark();
+				return true;}
+		}
+		return false;
+	}
 	//remove blocks that have gone off screen
 	public void removeUneededBlocks(){
 		for(int i = 0; i<blocks.size();i++){
-			if(blocks.get(i).getAxisLoc()<0){blocks.remove(i);}
+			if(blocks.get(i).getAxisLoc()<0){
+				blocks.get(i).setColorTransparent();
+				blocks.remove(i);}
 		}
 	}
-	public void checkForCollision(Bounds boundaries){
+	public boolean checkForCollision(Bounds boundaries){
 		for(BasicBlock block : blocks){
-			if(block.intersects(boundaries)){block.setColorRed();}
+			if(block.intersects(boundaries)&&block.wasTouched()==false){
+				block.setColorRed(); //set block color red
+				// update score if block hasn't been touched yet
+				if(!block.wasTouched()){
+					block.touch();
+					return true;
+				}
+			}
 		}
-		//return false;
+		return false;
 	}
 	public int getBlockNumber(){
 		return blocks.size();
