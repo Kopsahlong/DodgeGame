@@ -11,36 +11,47 @@ import javafx.scene.shape.Shape;
 
 public class BlockManager {
 	private static final int BLOCK_SPEED = 2;
-	private ArrayList<BasicBlock> blocks;
+	private ArrayList<Block> blocks;
 	private Group root;
+	private int level;
 	
-	public BlockManager(Group g){
+	public BlockManager(Group g, int l){
 		root = g;
-		blocks = new ArrayList<BasicBlock>();
+		level = l;
+		blocks = new ArrayList<Block>();
 	}
 	
 	public void addBlock(int mid, int entry){
-		//generate some midpoint and entry width depending on the level
-//		int mid = 200;
-//		int entry = 100;
-		//create new block
-		BasicBlock newBlock = new BasicBlock(mid,entry,root);
-		blocks.add(newBlock);
+		//randomly add a Barrier Block with a 10% chance for level 2
+		Block newBlock;
+		switch(level){
+		case 2:
+			double addNum = Math.random();
+			if(addNum<.2){newBlock = new BarrierBlock(mid,entry,root);}
+			else{newBlock = new BasicBlock(mid,entry,root);}
+			break;
+		default:
+			newBlock = new BasicBlock(mid, entry, root);
+			break;
+		}
+		blocks.add(newBlock);	
+		
 	}
 	//update block positions
 	public void updatePositions(){
-		for(BasicBlock block : blocks){
+		for(Block block : blocks){
 			block.setAxisLoc(block.getAxisLoc()-BLOCK_SPEED);
 		}
 	}
 	//check to see if a block is right above the smiley
 	public boolean rightAbove(int SmileyAxisLoc){
 		//this will update the score multiple times but we will have a way to check for that
-		for(BasicBlock block : blocks){
+		for(Block block : blocks){
 			if(Math.abs(block.getAxisLoc()-SmileyAxisLoc)<=1&&!block.isMarked()){
 				block.setColorGray();
 				block.mark();
-				return true;}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -52,16 +63,31 @@ public class BlockManager {
 				blocks.remove(i);}
 		}
 	}
-	public boolean checkForCollision(Bounds boundaries){
-		for(BasicBlock block : blocks){
+	public boolean checkForSmileyCollision(Bounds boundaries){
+		for(Block block : blocks){
+			//checks for smiley collision
 			if(block.intersects(boundaries)&&block.wasTouched()==false){
-				block.setColorRed(); //set block color red
+				//block.setColorRed(); //set block color red
 				// update score if block hasn't been touched yet
 				if(!block.wasTouched()){
+					block.smileyIntersect();
 					block.touch();
 					return true;
 				}
 			}
+			
+		}
+		return false;
+	}
+	public boolean checkForBulletCollision(Bounds boundaries){
+		for(Block block : blocks){
+			//checks for bullet collision
+			if(block.intersects(boundaries)&&Bullet.isActive()){
+				//block.setColorRed(); //set block color red
+				// update score if block hasn't been touched yet
+				block.bulletIntersect();
+			}
+			
 		}
 		return false;
 	}

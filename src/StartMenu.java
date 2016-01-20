@@ -32,6 +32,9 @@ class StartMenu {
     private DodgeGameRunner myGame;
     private static Timeline animation;
     private static Timeline animationBlock;
+    private KeyFrame frame;
+    private KeyFrame frameBlock;
+
 
     public StartMenu(Stage stage){
     	//open up startmenu scene
@@ -58,40 +61,45 @@ class StartMenu {
         myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
-        Button btn = new Button("Start Game");
+        Button btn = new Button("Start Level 1");
         btn.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){startGame();}
+        	public void handle(ActionEvent event){startGame(1);}
         });
         root.getChildren().add(btn);
+        Button btn2 = new Button("Start Level 2");
+        btn2.setOnAction(new EventHandler<ActionEvent>() { 
+        	public void handle(ActionEvent event){startGame(2);}
+        });
+        root.getChildren().add(btn2);
         // order added to the group is the order in which they are drawn
         // Respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return myScene;
     }
-    public void startGame(){
+    public void startGame(int level){
     	//close previous stage
     	s.close();
         // attach game to the stage and display it
-        myGame = new DodgeGameRunner(s);
+        myGame = new DodgeGameRunner(s,level);
         s.setTitle(myGame.getTitle());
         Scene gamescene = myGame.init(Main.WIDTH, Main.HEIGHT);
         s.setScene(gamescene);
         s.show();
         
      // sets the game's loop
-        KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+        frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                                       e -> myGame.step(SECOND_DELAY));
         animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.getKeyFrames().add(frame);
         animation.play();
         //sets a loop to create and destroy blocks
-        KeyFrame frame2 = new KeyFrame(Duration.millis(1000),//2000
+        frameBlock = new KeyFrame(Duration.millis(1000),//2000
                 e -> myGame.blockStep(5));//10
         animationBlock = new Timeline();
         animationBlock.setCycleCount(Timeline.INDEFINITE);
-        animationBlock.getKeyFrames().add(frame2);
+        animationBlock.getKeyFrames().add(frameBlock);
         animationBlock.play();
     }
     public static void stopAnimation(){

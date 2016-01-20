@@ -1,14 +1,9 @@
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
-public class BasicBlock implements Block{
+public class BarrierBlock implements Block{
 	private int myAxisLoc;
 	private int myEntryWidth;
 	private int myMidpoint;
@@ -18,9 +13,11 @@ public class BasicBlock implements Block{
     private boolean touched = false;
     private Rectangle myBottom;
     private Group root;
-
+    private boolean barrierPresent = true;
+    
+    private Rectangle myBarrier;
     //initialize the block object
-	public BasicBlock(int mid, int entry, Group g) {
+	public BarrierBlock(int mid, int entry, Group g) {
 		myMidpoint = mid;
 		myEntryWidth = entry;
 		root = g;
@@ -31,16 +28,20 @@ public class BasicBlock implements Block{
 	public void drawBlock(){
 		myTop = new Rectangle(Main.WIDTH, 0, BLOCKWIDTH, myMidpoint-myEntryWidth/2);
         myTop.setFill(Color.BLACK);
-        myBottom = new Rectangle(Main.WIDTH, myMidpoint+myEntryWidth/2, BLOCKWIDTH,Main.HEIGHT-(myMidpoint-myEntryWidth/2));
+        myBottom = new Rectangle(Main.WIDTH, myMidpoint+myEntryWidth/2, BLOCKWIDTH, Main.HEIGHT-(myMidpoint-myEntryWidth/2));
         myBottom.setFill(Color.BLACK);
+        myBarrier = new Rectangle(Main.WIDTH, myMidpoint-myEntryWidth/2+10, BLOCKWIDTH, myEntryWidth - 20);
+        myBarrier.setFill(Color.ALICEBLUE);
         root.getChildren().add(myTop);
         root.getChildren().add(myBottom);
+        root.getChildren().add(myBarrier);
 	}
 	//update the blocks location
 	public void setAxisLoc(int newAxisLoc){
 		myAxisLoc = newAxisLoc;
 		myTop.setX(myAxisLoc);
 		myBottom.setX(myAxisLoc);
+		myBarrier.setX(myAxisLoc);
 	}
 	//returns Axis Location
 	public int getAxisLoc(){
@@ -48,13 +49,19 @@ public class BasicBlock implements Block{
 	}
 	//returns whether or not the block intersects a given object
 	public boolean intersects(Bounds boundaries){
-		return myTop.intersects(boundaries) || myBottom.intersects(boundaries);
+		return myTop.intersects(boundaries) || myBottom.intersects(boundaries) || (myBarrier.intersects(boundaries)&&barrierPresent);
 	}
 	public void smileyIntersect(){
+		if(barrierPresent){myBarrier.setFill(Color.RED);}
 		setColorRed();
 	}
+	//make the bullet inactive, and if the bullet hit the barrier, then make the barrier inactive
 	public void bulletIntersect(){
 		Bullet.makeInActive();
+		if(myBarrier.intersects(Bullet.getBounds())){
+			barrierPresent=false;
+			myBarrier.setFill(Color.TRANSPARENT);
+		}//has hit the barrier
 	}
 	//setblock color
 	public void setColorRed(){
@@ -81,4 +88,5 @@ public class BasicBlock implements Block{
 	public boolean wasTouched(){
 		return touched;
 	}
+
 }

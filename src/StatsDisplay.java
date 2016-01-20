@@ -17,8 +17,10 @@ public class StatsDisplay {
 	private int lives;
 	private Text scoreText;
 	private Text lifeText;
+	private Text levelText;
+	private int level;
 	
-	public StatsDisplay(Group g){
+	public StatsDisplay(Group g, int level){
 		root = g;
 		score = 0;
 		lives = 3;
@@ -27,11 +29,18 @@ public class StatsDisplay {
 		scoreText.setY(20);
 		scoreText.setText("Score: "+score);
         root.getChildren().add(scoreText);
+        
         lifeText = new Text();
         lifeText.setX(Main.WIDTH-180);
         lifeText.setY(20);
         lifeText.setText("Lives: "+lives);
         root.getChildren().add(lifeText);
+        
+        levelText = new Text();
+        levelText.setX(Main.WIDTH-280);
+        levelText.setY(20);
+        levelText.setText("Level: "+level);
+        root.getChildren().add(levelText);
 	}
 	public void setScore(int newscore){
 		score = newscore;

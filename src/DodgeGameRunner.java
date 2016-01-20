@@ -35,16 +35,19 @@ class DodgeGameRunner {
     private GameOverMenu gameOverScreen;
     private Smiley myCharacter;
     private BasicBlock block;
+    private int level;
     private BlockManager block_manage;
     private StatsDisplay stats;
     private Group root;
+    private Bullet bullet;
     public static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 //    private Timeline animation;
 //    private Timeline animationBlock;
     
-    public DodgeGameRunner(Stage stage){
+    public DodgeGameRunner(Stage stage, int l){
+    	level = l;
     	s = stage;
     }
     /**
@@ -66,9 +69,10 @@ class DodgeGameRunner {
         Scene myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
-        stats = new StatsDisplay(root);
+        stats = new StatsDisplay(root,level);
         myCharacter = new Smiley(root);
-        block_manage = new BlockManager(root);
+        bullet = new Bullet(root);
+        block_manage = new BlockManager(root,level);
         // order added to the group is the order in which they are drawn
         // Respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
@@ -84,7 +88,9 @@ class DodgeGameRunner {
      */
     public void step (double elapsedTime) {
         block_manage.updatePositions();
-        if(block_manage.checkForCollision(myCharacter.getBounds())){stats.loseLife();}
+        bullet.updatePosition();
+        if(block_manage.checkForSmileyCollision(myCharacter.getBounds())){stats.loseLife();}
+        block_manage.checkForBulletCollision(bullet.getBounds());
         if(stats.getLives()==0){finalScore = stats.getScore(); gameOver();}
         if(block_manage.rightAbove(myCharacter.getX())){stats.setScore(stats.getScore()+1);}
     }
@@ -116,6 +122,8 @@ class DodgeGameRunner {
             case DOWN:
             	myCharacter.setY(myCharacter.getY() + KEY_INPUT_SPEED);
                 break;
+            case SPACE:
+            	if(level==2){bullet.shoot(myCharacter.getX(),myCharacter.getY());}
             default:
                 // do nothing
         }
