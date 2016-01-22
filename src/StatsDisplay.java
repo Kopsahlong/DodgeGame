@@ -28,18 +28,21 @@ public class StatsDisplay {
 		scoreText.setX(Main.WIDTH-80);
 		scoreText.setY(20);
 		scoreText.setText("Score: "+score);
+		scoreText.setFill(Color.WHITE);
         root.getChildren().add(scoreText);
         
         lifeText = new Text();
         lifeText.setX(Main.WIDTH-180);
         lifeText.setY(20);
         lifeText.setText("Lives: "+lives);
+        lifeText.setFill(Color.WHITE);
         root.getChildren().add(lifeText);
         
         levelText = new Text();
         levelText.setX(Main.WIDTH-280);
         levelText.setY(20);
         levelText.setText("Level: "+level);
+        levelText.setFill(Color.WHITE);
         root.getChildren().add(levelText);
 	}
 	public void setScore(int newscore){

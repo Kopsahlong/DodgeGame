@@ -27,7 +27,7 @@ public class Bullet {
 	}
 	public void shoot(int x, int y){
 		active = true;
-		myBullet.setFill(Color.BLACK);
+		myBullet.setFill(Color.WHITE);
 		myX = x+20;
 		myY = y+20;
 		myBullet.setCenterX(myX);

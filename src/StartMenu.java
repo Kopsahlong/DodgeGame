@@ -40,6 +40,7 @@ class StartMenu {
     private static Stage s;
     private static DodgeGameRunner myGame;
     private static CharacterMenu charMenu;
+    private DescriptionScreen descripScreen;
     private static Timeline animation;
     private static Timeline animationBlock;
     private static KeyFrame frame;
@@ -70,22 +71,27 @@ class StartMenu {
         // Create a place to see the shapes
         myScene = new Scene(root, width, height, Color.WHITE);
         
+        Image logoicon = new Image(getClass().getClassLoader().getResourceAsStream("cavedodgelogo2.png"));
+        ImageView myLogo = new ImageView(logoicon);
         //create objects
-        Label welcomeLabel = new Label("Welcome to Dodge Game!");
-        welcomeLabel.setFont(Font.font("Cambria", 32));
+        //Label welcomeLabel = new Label("Welcome to Dodge Game!");
+        //welcomeLabel.setFont(Font.font("Cambria", 32));
 
         Button btn1 = new Button("Start Level 1");
-        btn1.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){startGame(1);}
+        btn1.setOnAction(new EventHandler<ActionEvent>() /*{ 
+        	public void handle(ActionEvent event){startGame(1);}*/
+        	{ 
+            	public void handle(ActionEvent event){openDescripScreen(1);}
         });
-        Label scoreLevel1 = new Label("    High Score: NA");
+        //btn1.setAlignment(Pos.CENTER);
+        btn1.setPrefSize(148, 20);
         
         Button btn2 = new Button("Start Level 2");
         btn2.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){startGame(2);}
+        	public void handle(ActionEvent event){openDescripScreen(2);}
         });
-        Label scoreLevel2 = new Label("    High Score: NA");
-
+        btn2.setPrefSize(148, 20);
+       
         Button btn3 = new Button("Customize Character");
         btn3.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event){customizeCharacter();}
@@ -94,23 +100,29 @@ class StartMenu {
         //TODO: GO BACK AND FIX THIS SOON
 
         GridPane gridpane = new GridPane();
-        GridPane smallgrid = new GridPane();
-        smallgrid.add(btn1, 1, 1);
-        smallgrid.add(btn2, 1, 2);
-        smallgrid.add(btn3, 1, 3);
-        smallgrid.add(scoreLevel1, 2, 1);
-        smallgrid.add(scoreLevel2, 2, 2);
-
-        gridpane.setAlignment(Pos.CENTER);
-        gridpane.add(welcomeLabel,1,1);
-        gridpane.add(smallgrid, 1, 2);
-        myScene.setRoot(gridpane);
+        gridpane.add(myLogo,1,1);
         
+        GridPane smallgrid = new GridPane();
+        smallgrid.add(btn1,1,1);
+        smallgrid.add(btn2,1,2);
+        smallgrid.add(btn3,1,3);
+        smallgrid.setAlignment(Pos.CENTER);
+
+        gridpane.add(smallgrid,1,2);
+        gridpane.setAlignment(Pos.CENTER);
+
+        myScene.setRoot(gridpane);
+        //gridpane.setStyle("-fx-background-color: #FFFFFF;");
+        gridpane.setStyle("-fx-background-image: url('../images/caveBackGround3.jpg')");
         // order added to the group is the order in which they are drawn
         // Respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
         return myScene;
+    }
+    public void openDescripScreen(int level){
+    	s.close();
+        descripScreen = new DescriptionScreen(s,level);
     }
     public static void customizeCharacter(){
     	//close previous stage

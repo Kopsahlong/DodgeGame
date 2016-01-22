@@ -15,6 +15,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -58,24 +59,35 @@ class GameOverMenu {
         myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
+
+		Image haloicon = new Image(getClass().getClassLoader().getResourceAsStream("HaloEmojiDisplay.png"));
+        ImageView myHaloSmiley = new ImageView(haloicon);
+        myHaloSmiley.setX(Main.WIDTH/2-110);
+        myHaloSmiley.setY(Main.HEIGHT/2-160);
+        root.getChildren().add(myHaloSmiley);
+        
         Text gameOverText = new Text();
-        gameOverText.setX(Main.WIDTH/2);
-        gameOverText.setY(Main.HEIGHT/2-100);
+        gameOverText.setX(Main.WIDTH/2-50);
+        gameOverText.setY(Main.HEIGHT/2+80);
         gameOverText.setText("GAME OVER!");
+        gameOverText.setFont(new Font("Arial", 20));
         root.getChildren().add(gameOverText);
         
         Text finalScore = new Text();
-        finalScore.setX(Main.WIDTH/2);
-        finalScore.setY(Main.HEIGHT/2);
+        finalScore.setX(Main.WIDTH/2-37);
+        finalScore.setY(Main.HEIGHT/2+100);
         finalScore.setText("FINAL SCORE: "+score);
         root.getChildren().add(finalScore);
+        
+        
         
         Button tryAgainBtn = new Button("New Game");
         tryAgainBtn.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event){openMenu();}
         });
         root.getChildren().add(tryAgainBtn);
-        
+        tryAgainBtn.setTranslateX(Main.WIDTH/2-30);
+        tryAgainBtn.setTranslateY(Main.HEIGHT/2+150);
         // order added to the group is the order in which they are drawn
         // Respond to input
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));

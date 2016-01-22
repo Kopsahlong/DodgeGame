@@ -7,6 +7,8 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,26 +36,45 @@ public class NextLevelMenu {
         myScene = new Scene(root, width, height, Color.WHITE);
         
       //create objects
-        Label winningLabel = new Label("YOU WON LEVEL "+level+"!");
-        winningLabel.setFont(Font.font("Cambria", 32));
-        Button nextLevelBtn = new Button("Next Level");
-        nextLevelBtn.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){StartMenu.startGame(level+1);}
-        });
         
-        Button startNewGameBtn = new Button("Start New Game");
+        Image winicon = new Image(getClass().getClassLoader().getResourceAsStream("WinningDisplay.png"));
+        ImageView WinningImage = new ImageView(winicon);
+        WinningImage.setX(270);
+        WinningImage.setY(30);
+        root.getChildren().add(WinningImage);
+        
+        Text winningText = new Text();
+        winningText.setX(Main.WIDTH/2-95);
+        winningText.setY(Main.HEIGHT/2+80);
+        if(level!=2){
+        	winningText.setText("YOU WON LEVEL "+level+"!");
+        	Button nextLevelBtn = new Button("Next Level");
+        	nextLevelBtn.setOnAction(new EventHandler<ActionEvent>() { 
+        		public void handle(ActionEvent event){
+        			s.close();
+        			DescriptionScreen descripScreen = new DescriptionScreen(s,level+1);
+        		}
+        	});
+        	nextLevelBtn.setTranslateX(Main.WIDTH/2-50);
+        	nextLevelBtn.setTranslateY(Main.HEIGHT/2+130);
+        	root.getChildren().add(nextLevelBtn);
+        }
+        else{
+        	winningText.setText("YOU WON THE GAME!");
+            winningText.setX(Main.WIDTH/2-112);
+        }
+        winningText.setFont(new Font("Arial", 20));
+        root.getChildren().add(winningText);
+
+        Button startNewGameBtn = new Button("New Game");
         startNewGameBtn.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event){openMenu();}
         });
+        startNewGameBtn.setTranslateX(Main.WIDTH/2-50);
+        startNewGameBtn.setTranslateY(Main.HEIGHT/2+160);
+        root.getChildren().add(startNewGameBtn);
 
         //TODO: GO BACK AND FIX THIS SOON
-
-        GridPane gridpane = new GridPane();
-        gridpane.setAlignment(Pos.CENTER);
-        gridpane.add(winningLabel,1,1);
-        gridpane.add(nextLevelBtn, 1, 2);
-        gridpane.add(startNewGameBtn, 1, 3);
-        myScene.setRoot(gridpane);
         
         return myScene;
 	}

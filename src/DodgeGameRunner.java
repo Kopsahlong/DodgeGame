@@ -39,7 +39,7 @@ class DodgeGameRunner {
     private Smiley myCharacter;
     private BasicBlock block;
     private int level;
-    private static final int[] winningScore = {50,100};//winning scores for each level
+    private static final int[] winningScore = {75,100};//winning scores for each level
     private BlockManager block_manage;
     private StatsDisplay stats;
     private Group root;
@@ -71,7 +71,13 @@ class DodgeGameRunner {
         //TODO: HOW TO SET BACKGROUND COLOR
         //root.setStyle("-fx-background-image: url('/Users/Krista/Documents/workspace_CS308/DodgeGame/images/caveBackGround2.png')");  
         // Create a place to see the shapes
-        Scene myScene = new Scene(root, width, height, Color.WHITE);
+        Scene myScene = new Scene(root, width, height, Color.LIGHTGRAY);
+        
+        Image caveicon = new Image(getClass().getClassLoader().getResourceAsStream("caveBackGround3.jpg"));
+        ImageView caveImage = new ImageView(caveicon);
+        caveImage.setX(0);
+        caveImage.setY(0);
+        root.getChildren().add(caveImage);
         
         //create objects
         stats = new StatsDisplay(root,level);
@@ -121,8 +127,7 @@ class DodgeGameRunner {
     public void wonLevel(){
     	StartMenu.stopAnimation();
     	s.close();
-    	if(level==HIGHEST_LEVEL){finalLevelScreen = new FinalLevelMenu(s);}
-    	else{nextLevelScreen = new NextLevelMenu(s,level);}
+    	nextLevelScreen = new NextLevelMenu(s,level);
     }
     // What to do each time a key is pressed
     private void handleKeyInput (KeyCode code) {

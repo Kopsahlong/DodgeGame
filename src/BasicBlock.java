@@ -30,9 +30,9 @@ public class BasicBlock implements Block{
 	//draw the block on the root, starting from far right screen
 	public void drawBlock(){
 		myTop = new Rectangle(Main.WIDTH, 0, BLOCKWIDTH, myMidpoint-myEntryWidth/2);
-        myTop.setFill(Color.BLACK);
+        myTop.setFill(Color.DARKGRAY);
         myBottom = new Rectangle(Main.WIDTH, myMidpoint+myEntryWidth/2, BLOCKWIDTH,Main.HEIGHT-(myMidpoint-myEntryWidth/2));
-        myBottom.setFill(Color.BLACK);
+        myBottom.setFill(Color.DARKGRAY);
         root.getChildren().add(myTop);
         root.getChildren().add(myBottom);
 	}
