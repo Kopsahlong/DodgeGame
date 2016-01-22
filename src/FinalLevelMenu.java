@@ -1,43 +1,34 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import java.awt.TextField;
-import java.util.ArrayList;
-import java.util.Timer;
+import javafx.scene.control.Label;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 
-class GameOverMenu {
-    public static final String TITLE = "Game Over!";
+class FinalLevelMenu {
+    public static final String TITLE = "WINNER!";
     public static final int KEY_INPUT_SPEED = 15;
     private Scene myScene;
     public static final int FRAMES_PER_SECOND = 60;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private int score;
     private Stage s;
     private DodgeGameRunner myGame;
 
-    public GameOverMenu(Stage stage, int finalScoreNum){
+    public FinalLevelMenu(Stage stage){
     	//open up startmenu scene
     	s = stage;
-    	score = finalScoreNum;
-    	Scene gameoverscene = init(Main.WIDTH, Main.HEIGHT);
-    	s.setScene(gameoverscene);
+    	Scene finallevelscene = init(Main.WIDTH, Main.HEIGHT);
+    	s.setScene(finallevelscene);
     	s.show();
     }
     /**
@@ -58,23 +49,19 @@ class GameOverMenu {
         myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
-        Text gameOverText = new Text();
-        gameOverText.setX(Main.WIDTH/2);
-        gameOverText.setY(Main.HEIGHT/2-100);
-        gameOverText.setText("GAME OVER!");
-        root.getChildren().add(gameOverText);
+        Label winningLabel = new Label("YOU WON THE GAME!!");
+        winningLabel.setFont(Font.font("Cambria", 32));
         
-        Text finalScore = new Text();
-        finalScore.setX(Main.WIDTH/2);
-        finalScore.setY(Main.HEIGHT/2);
-        finalScore.setText("FINAL SCORE: "+score);
-        root.getChildren().add(finalScore);
-        
-        Button tryAgainBtn = new Button("New Game");
-        tryAgainBtn.setOnAction(new EventHandler<ActionEvent>() { 
+        Button startNewGameBtn = new Button("New Game");
+        startNewGameBtn.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event){openMenu();}
         });
-        root.getChildren().add(tryAgainBtn);
+        
+        GridPane gridpane = new GridPane();
+        gridpane.setAlignment(Pos.CENTER);
+        gridpane.add(winningLabel,1,1);
+        gridpane.add(startNewGameBtn, 1, 2);
+        myScene.setRoot(gridpane);       
         
         // order added to the group is the order in which they are drawn
         // Respond to input

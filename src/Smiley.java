@@ -16,8 +16,14 @@ public class Smiley {
 	public Smiley(Group g){
 		root = g;
 		//draw the smiley
-		Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smile.png"));
-        mySmiley = new ImageView(smileicon);
+		
+		//Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smiley3.png"));
+        //mySmiley = new ImageView(smileicon);
+		if(CharacterMenu.getChosenImage()!=null){mySmiley = CharacterMenu.getChosenImage();}
+		else{
+			Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smiley3.png"));
+			mySmiley = new ImageView(smileicon);
+		}
 		Y = (int)(Main.HEIGHT / 2  - mySmiley.getBoundsInLocal().getHeight() / 2);
 		X = (int)(Main.WIDTH / 5 - mySmiley.getBoundsInLocal().getWidth() / 2);
         mySmiley.setX(X);
