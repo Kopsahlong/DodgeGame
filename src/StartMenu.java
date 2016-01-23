@@ -1,58 +1,25 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-
-import java.awt.TextField;
-import java.util.ArrayList;
-import java.util.Timer;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
 
 
 class StartMenu {
     public static final String TITLE = "Dodge Game";
-    public static final int KEY_INPUT_SPEED = 15;
+    private static final int BUTTON_WIDTH = 148;
+    private static final int BUTTON_HEIGHT = 20;
+    private Group root;
     private Scene myScene;
-    public static final int FRAMES_PER_SECOND = 90; //60
-    private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    public static final double BLOCK_FRAMES_PER_SECOND = 2.5; //60
-    private static final double BLOCK_MILLISECOND_DELAY = 1000 / BLOCK_FRAMES_PER_SECOND;
-    private static final double BLOCK_SECOND_DELAY = 1.0 / BLOCK_FRAMES_PER_SECOND;
-    private static Stage s;
-    private static DodgeGameRunner myGame;
-    private static CharacterMenu charMenu;
-    private DescriptionScreen descripScreen;
-    private static Timeline animation;
-    private static Timeline animationBlock;
-    private static KeyFrame frame;
-    private static KeyFrame frameBlock;
-
-
-    public StartMenu(Stage stage){
-    	//open up startmenu scene
-    	s = stage;
-    	Scene menuscene = init(Main.WIDTH, Main.HEIGHT);
-    	s.setScene(menuscene);
-    	s.show();
+    private GameController myGC; //TODO: COME BACK AND FIX THIS STATIC THING
+    public StartMenu(GameController gc){
+    	myGC = gc;
     }
     /**
      * Returns name of the game.
@@ -66,40 +33,26 @@ class StartMenu {
      */
     public Scene init (int width, int height) {
         // Create a scene graph to organize the scene
-        Group root = new Group();
+        root = new Group();
         
         // Create a place to see the shapes
         myScene = new Scene(root, width, height, Color.WHITE);
         
+        //create objects
         Image logoicon = new Image(getClass().getClassLoader().getResourceAsStream("cavedodgelogo2.png"));
         ImageView myLogo = new ImageView(logoicon);
-        //create objects
-        //Label welcomeLabel = new Label("Welcome to Dodge Game!");
-        //welcomeLabel.setFont(Font.font("Cambria", 32));
-
-        Button btn1 = new Button("Start Level 1");
-        btn1.setOnAction(new EventHandler<ActionEvent>() /*{ 
-        	public void handle(ActionEvent event){startGame(1);}*/
-        	{ 
-            	public void handle(ActionEvent event){openDescripScreen(1);}
-        });
-        //btn1.setAlignment(Pos.CENTER);
-        btn1.setPrefSize(148, 20);
         
-        Button btn2 = new Button("Start Level 2");
-        btn2.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){openDescripScreen(2);}
-        });
-        btn2.setPrefSize(148, 20);
-       
-        Button btn3 = new Button("Customize Character");
-        btn3.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){customizeCharacter();}
-        });
-        
-        //TODO: GO BACK AND FIX THIS SOON
+        Button btn1 = makeButton("Start Level 1", GameController.DESCRIP,1);
+        Button btn2 = makeButton("Start Level 2", GameController.DESCRIP,2);
+        Button btn3 = makeButton("Customize Character", GameController.CHOOSE_CHAR,-1);
 
-        GridPane gridpane = new GridPane();
+        putItemsInGrid(myLogo, btn1, btn2, btn3);
+        
+        return myScene;
+    }
+
+	private void putItemsInGrid(ImageView myLogo, Button btn1, Button btn2, Button btn3) {
+		GridPane gridpane = new GridPane();
         gridpane.add(myLogo,1,1);
         
         GridPane smallgrid = new GridPane();
@@ -110,75 +63,26 @@ class StartMenu {
 
         gridpane.add(smallgrid,1,2);
         gridpane.setAlignment(Pos.CENTER);
-
         myScene.setRoot(gridpane);
-        //gridpane.setStyle("-fx-background-color: #FFFFFF;");
         gridpane.setStyle("-fx-background-image: url('../images/caveBackGround3.jpg')");
-        // order added to the group is the order in which they are drawn
-        // Respond to input
-        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
-        return myScene;
-    }
+	}
+    public Button makeButton(String text, String type, int level){
+    	Button btn = new Button(text);
+		btn.setOnAction(new EventHandler<ActionEvent>() { 
+        	public void handle(ActionEvent event){
+        		myGC.switchScene(type,level);
+        	}
+        });
+        btn.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+		return btn;
+	}
     public void openDescripScreen(int level){
-    	s.close();
-        descripScreen = new DescriptionScreen(s,level);
+    	myGC.switchScene(GameController.DESCRIP,level);
     }
-    public static void customizeCharacter(){
-    	//close previous stage
-    	s.close();
-    	charMenu = new CharacterMenu(s);
-        s.setTitle(charMenu.getTitle());
-        Scene charScene = charMenu.init(Main.WIDTH, Main.HEIGHT);
-        s.setScene(charScene);
-        s.show();
+    public void customizeCharacter(){
+    	myGC.switchScene(GameController.CHOOSE_CHAR,-1);
     }
-    public static void startGame(int level){
-    	//close previous stage
-    	s.close();
-        // attach game to the stage and display it
-        myGame = new DodgeGameRunner(s,level);
-        s.setTitle(myGame.getTitle());
-        Scene gamescene = myGame.init(Main.WIDTH, Main.HEIGHT);
-        s.setScene(gamescene);
-        s.show();
-        
-     // sets the game's loop
-        frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-                                      e -> myGame.step(SECOND_DELAY));
-        animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-        //sets a loop to create and destroy blocks
-        frameBlock = new KeyFrame(Duration.millis(BLOCK_MILLISECOND_DELAY),//1000
-                e -> myGame.blockStep(BLOCK_SECOND_DELAY));//10
-        animationBlock = new Timeline();
-        animationBlock.setCycleCount(Timeline.INDEFINITE);
-        animationBlock.getKeyFrames().add(frameBlock);
-        animationBlock.play();
-    }
-    public static void stopAnimation(){
-    	animation.stop();
-    	animationBlock.stop();
-    }
-    /**
-     * Change properties of shapes to animate them
-     * 
-     * Note, there are more sophisticated ways to animate shapes,
-     * but these simple ways work too.
-     */
-
-    // What to do each time a key is pressed
-    private void handleKeyInput (KeyCode code) {
-        switch (code) {
-            default:
-                // do nothing
-        }
-    }
-
-    // What to do each time a key is pressed
-    private void handleMouseInput (double x, double y) {
-    	//do nothing
+    public void startGame(int level){
+    	myGC.switchScene(GameController.GAME,level);
     }
 }

@@ -13,5 +13,5 @@ public interface Block {
 	public void mark();
 	public boolean isMarked();
 	public void smileyIntersect();
-	public void bulletIntersect();
+	public void bulletIntersect(Bullet bullet);
 }

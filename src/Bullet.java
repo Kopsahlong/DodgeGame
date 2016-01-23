@@ -9,7 +9,7 @@ public class Bullet {
 	private int myY;
 	private Group root;
 	private final static int BULLET_SPEED = 3;
-	private static boolean active = false;
+	private boolean active = false;
 	
 	public Bullet(Group g){
 		root = g;
@@ -37,16 +37,14 @@ public class Bullet {
 		myX = myX+BULLET_SPEED;
 		myBullet.setCenterX(myX);
 	}
-	public static boolean isActive(){
+	public boolean isActive(){
 		return active;
 	}
-	public static void makeInActive(){
-		
+	public void makeInActive(){
 		active = false;
 		myBullet.setFill(Color.TRANSPARENT);
-		System.out.println("here");
 	}
-	public static Bounds getBounds(){
+	public Bounds getBounds(){
 		return myBullet.getBoundsInParent();
 	}
 }

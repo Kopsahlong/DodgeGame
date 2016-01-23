@@ -1,36 +1,29 @@
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class CharacterMenu {
-	private Stage s;
+	//private Stage s;
 	private static ImageView myChosenImage;
 	private int myChooserX = Main.WIDTH/5;
 	private int myChooserY = 180;
     private Scene myScene;
     private Circle myChooser;
-	private final static String TITLE = "Dodge Game";
 	private Group root;
 	private static ImageView mySmiley;
 	private ImageView myHeartSmiley;
 	private ImageView myTongueEmoji;
 	private ImageView myAngryEmoji;
+	private UIController myUI;
+    private GameController myGC;
 
-	public CharacterMenu(Stage stage){
-		s = stage;
-    	Scene finallevelscene = init(Main.WIDTH, Main.HEIGHT);
-    	s.setScene(finallevelscene);
-    	s.show();
+	public CharacterMenu(GameController gc, UIController ui){
+		myGC = gc;
+		myUI = ui;
 	}
-	public String getTitle () {
-        return TITLE;
-    }
 	public Scene init(int width, int height){
 		// Create a scene graph to organize the scene
         root = new Group();
@@ -40,46 +33,15 @@ public class CharacterMenu {
         
         myChooser = new Circle();
 		root.getChildren().add(myChooser);
-
         drawChooser();
 		
-        Text chooseText = new Text();
-        chooseText.setX(220);
-        chooseText.setY(50);
-        chooseText.setText("Choose a character by pressing the left and right arrow keys.");
-        root.getChildren().add(chooseText);
+        myUI.writeStaticText(root,"Choose a character by pressing the left and right arrow keys.",220,50);
+        myUI.writeStaticText(root,"Press <Enter> to choose and return to Start.",270,300);
 
-        Text remindText = new Text();
-        remindText.setX(270);
-        remindText.setY(300);
-        remindText.setText("Press <Enter> to choose and return to Start.");
-        root.getChildren().add(remindText);
-
-        
-        //create objects
-        Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smiley3.png"));
-        mySmiley = new ImageView(smileicon);
-        mySmiley.setX(Main.WIDTH/5-30);
-        mySmiley.setY(100);
-        root.getChildren().add(mySmiley);
-        
-        Image hearticon = new Image(getClass().getClassLoader().getResourceAsStream("HeartEyesEmoji.png"));
-        myHeartSmiley = new ImageView(hearticon);
-        myHeartSmiley.setX(2*Main.WIDTH/5-30);
-        myHeartSmiley.setY(100);
-        root.getChildren().add(myHeartSmiley);
-        
-        Image tongueicon = new Image(getClass().getClassLoader().getResourceAsStream("TongueEmoji.png"));
-        myTongueEmoji = new ImageView(tongueicon);
-        myTongueEmoji.setX(3*Main.WIDTH/5-30);
-        myTongueEmoji.setY(100);
-        root.getChildren().add(myTongueEmoji);
-        
-        Image angryicon = new Image(getClass().getClassLoader().getResourceAsStream("AngryEmoji.png"));
-        myAngryEmoji = new ImageView(angryicon);
-        myAngryEmoji.setX(4*Main.WIDTH/5-30);
-        myAngryEmoji.setY(100);
-        root.getChildren().add(myAngryEmoji);
+        mySmiley = myUI.makeImage(root,1*Main.WIDTH/5-30,100,"smiley3.png");
+        myHeartSmiley = myUI.makeImage(root,2*Main.WIDTH/5-30,100,"HeartEyesEmoji.png");
+        myTongueEmoji = myUI.makeImage(root,3*Main.WIDTH/5-30,100,"TongueEmoji.png");
+        myAngryEmoji = myUI.makeImage(root,4*Main.WIDTH/5-30,100,"AngryEmoji.png");
         
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return myScene;
@@ -98,7 +60,7 @@ public class CharacterMenu {
             if(myChooserX==2*Main.WIDTH/5){myChosenImage = myHeartSmiley;}
             if(myChooserX==3*Main.WIDTH/5){myChosenImage = myTongueEmoji;}
             if(myChooserX==4*Main.WIDTH/5){myChosenImage = myAngryEmoji;}
-        	openMenu();
+        	myGC.switchScene(GameController.START, -1);
         	break;
         case LEFT: //make selected emoji the one to the left if one exists there
         	if(myChooserX!=Main.WIDTH/5){myChooserX=myChooserX-Main.WIDTH/5;}
@@ -115,14 +77,5 @@ public class CharacterMenu {
     public static ImageView getChosenImage(){
     	if(myChosenImage==null){return mySmiley;}
     	else {return myChosenImage;}
-    }
-    public void openMenu(){//TODO: MAKE THIS INTO CLASS FOR START MENU
-    	s.close();
-        // attach main menu to stage and display it
-    	StartMenu startMenu = new StartMenu(s);	
-    	s.setTitle(startMenu.getTitle());
-        Scene menuscene = startMenu.init(Main.WIDTH, Main.HEIGHT);
-        s.setScene(menuscene);
-        s.show();
     }
 }

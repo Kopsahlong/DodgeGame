@@ -1,14 +1,4 @@
-import java.awt.TextField;
-import java.util.ArrayList;
-import java.util.Timer;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 public class StatsDisplay {
@@ -18,32 +8,21 @@ public class StatsDisplay {
 	private Text scoreText;
 	private Text lifeText;
 	private Text levelText;
-	private int level;
+	private UIController myUI;
 	
-	public StatsDisplay(Group g, int level){
+	public StatsDisplay(UIController ui, Group g, int level){
 		root = g;
 		score = 0;
 		lives = 3;
+		myUI = ui;
+		
 		scoreText = new Text();
-		scoreText.setX(Main.WIDTH-80);
-		scoreText.setY(20);
-		scoreText.setText("Score: "+score);
-		scoreText.setFill(Color.WHITE);
-        root.getChildren().add(scoreText);
-        
-        lifeText = new Text();
-        lifeText.setX(Main.WIDTH-180);
-        lifeText.setY(20);
-        lifeText.setText("Lives: "+lives);
-        lifeText.setFill(Color.WHITE);
-        root.getChildren().add(lifeText);
-        
+		lifeText = new Text();
         levelText = new Text();
-        levelText.setX(Main.WIDTH-280);
-        levelText.setY(20);
-        levelText.setText("Level: "+level);
-        levelText.setFill(Color.WHITE);
-        root.getChildren().add(levelText);
+
+        myUI.writeWhiteText(root,scoreText, "Score: "+score,Main.WIDTH-80,20);
+        myUI.writeWhiteText(root,lifeText, "Lives: "+lives,Main.WIDTH-180,20);
+        myUI.writeWhiteText(root,levelText, "Level: "+level,Main.WIDTH-280,20);
 	}
 	public void setScore(int newscore){
 		score = newscore;

@@ -1,12 +1,7 @@
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public class BasicBlock implements Block{
 	private int myAxisLoc;
@@ -53,8 +48,8 @@ public class BasicBlock implements Block{
 	public void smileyIntersect(){
 		setColorRed();
 	}
-	public void bulletIntersect(){
-		Bullet.makeInActive();
+	public void bulletIntersect(Bullet bullet){
+		bullet.makeInActive();
 	}
 	//setblock color
 	public void setColorRed(){

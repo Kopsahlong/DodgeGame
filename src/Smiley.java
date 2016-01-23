@@ -1,12 +1,7 @@
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public class Smiley {
 	private int Y;
@@ -15,10 +10,6 @@ public class Smiley {
 	private Group root;
 	public Smiley(Group g){
 		root = g;
-		//draw the smiley
-		
-		//Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smiley3.png"));
-        //mySmiley = new ImageView(smileicon);
 		if(CharacterMenu.getChosenImage()!=null){mySmiley = CharacterMenu.getChosenImage();}
 		else{
 			Image smileicon = new Image(getClass().getClassLoader().getResourceAsStream("smiley3.png"));

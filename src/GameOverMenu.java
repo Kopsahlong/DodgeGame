@@ -1,126 +1,45 @@
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import java.awt.TextField;
-import java.util.ArrayList;
-import java.util.Timer;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-
-
 
 class GameOverMenu {
     public static final String TITLE = "Game Over!";
     public static final int KEY_INPUT_SPEED = 15;
     private Scene myScene;
-    public static final int FRAMES_PER_SECOND = 60;
-    private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private int score;
-    private Stage s;
-    private DodgeGameRunner myGame;
+    private Group root;
+    private UIController myUI;
+    private GameController myGC;
 
-    public GameOverMenu(Stage stage, int finalScoreNum){
-    	//open up startmenu scene
-    	s = stage;
+    public GameOverMenu(GameController gc, UIController ui, int finalScoreNum){
+    	myUI = ui;
+    	myGC = gc;
     	score = finalScoreNum;
-    	Scene gameoverscene = init(Main.WIDTH, Main.HEIGHT);
-    	s.setScene(gameoverscene);
-    	s.show();
     }
-    /**
-     * Returns name of the game.
-     */
-    public String getTitle () {
-        return TITLE;
-    }
-
     /**
      * Create the game's scene
      */
     public Scene init (int width, int height) {
         // Create a scene graph to organize the scene
-        Group root = new Group();
+        root = new Group();
         
         // Create a place to see the shapes
         myScene = new Scene(root, width, height, Color.WHITE);
         
         //create objects
-
-		Image haloicon = new Image(getClass().getClassLoader().getResourceAsStream("HaloEmojiDisplay.png"));
-        ImageView myHaloSmiley = new ImageView(haloicon);
-        myHaloSmiley.setX(Main.WIDTH/2-110);
-        myHaloSmiley.setY(Main.HEIGHT/2-160);
-        root.getChildren().add(myHaloSmiley);
+        myUI.makeImage(root, Main.WIDTH/2-110, Main.HEIGHT/2-160, "HaloEmojiDisplay.png");
         
         Text gameOverText = new Text();
-        gameOverText.setX(Main.WIDTH/2-50);
-        gameOverText.setY(Main.HEIGHT/2+80);
-        gameOverText.setText("GAME OVER!");
+        myUI.writeText(root,gameOverText, "GAME OVER!", Main.WIDTH/2-50, Main.HEIGHT/2+80);
         gameOverText.setFont(new Font("Arial", 20));
-        root.getChildren().add(gameOverText);
         
         Text finalScore = new Text();
-        finalScore.setX(Main.WIDTH/2-37);
-        finalScore.setY(Main.HEIGHT/2+100);
-        finalScore.setText("FINAL SCORE: "+score);
-        root.getChildren().add(finalScore);
+        myUI.writeText(root,finalScore,"FINAL SCORE: "+score,Main.WIDTH/2-37, Main.HEIGHT/2+100);
         
-        
-        
-        Button tryAgainBtn = new Button("New Game");
-        tryAgainBtn.setOnAction(new EventHandler<ActionEvent>() { 
-        	public void handle(ActionEvent event){openMenu();}
-        });
-        root.getChildren().add(tryAgainBtn);
-        tryAgainBtn.setTranslateX(Main.WIDTH/2-30);
-        tryAgainBtn.setTranslateY(Main.HEIGHT/2+150);
-        // order added to the group is the order in which they are drawn
-        // Respond to input
-        myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
-        myScene.setOnMouseClicked(e -> handleMouseInput(e.getX(), e.getY()));
+        myUI.makeButton(root, "New Game", Main.WIDTH/2-30, Main.HEIGHT/2+150, GameController.START, -1);
+
         return myScene;
-    }
-    public void openMenu(){
-    	s.close();
-        // attach main menu to stage and display it
-    	StartMenu startMenu = new StartMenu(s);	
-    	s.setTitle(startMenu.getTitle());
-        Scene menuscene = startMenu.init(Main.WIDTH, Main.HEIGHT);
-        s.setScene(menuscene);
-        s.show();
-    }
-
-    /**
-     * Change properties of shapes to animate them
-     * 
-     * Note, there are more sophisticated ways to animate shapes,
-     * but these simple ways work too.
-     */
-
-    // What to do each time a key is pressed
-    private void handleKeyInput (KeyCode code) {
-        switch (code) {
-            default:
-                // do nothing
-        }
-    }
-
-    // What to do each time a key is pressed
-    private void handleMouseInput (double x, double y) {
-    	//do nothing
     }
 }

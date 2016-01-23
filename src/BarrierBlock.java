@@ -56,9 +56,9 @@ public class BarrierBlock implements Block{
 		setColorRed();
 	}
 	//make the bullet inactive, and if the bullet hit the barrier, then make the barrier inactive
-	public void bulletIntersect(){
-		Bullet.makeInActive();
-		if(myBarrier.intersects(Bullet.getBounds())){
+	public void bulletIntersect(Bullet bullet){
+		bullet.makeInActive();
+		if(myBarrier.intersects(bullet.getBounds())){
 			barrierPresent=false;
 			myBarrier.setFill(Color.TRANSPARENT);
 		}//has hit the barrier

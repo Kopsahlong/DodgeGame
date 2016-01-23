@@ -1,13 +1,6 @@
 import java.util.ArrayList;
 import javafx.scene.Group;
 import javafx.geometry.Bounds;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 public class BlockManager {
 	private static final int BLOCK_SPEED = 2;
@@ -67,7 +60,6 @@ public class BlockManager {
 		for(Block block : blocks){
 			//checks for smiley collision
 			if(block.intersects(boundaries)&&block.wasTouched()==false){
-				//block.setColorRed(); //set block color red
 				// update score if block hasn't been touched yet
 				if(!block.wasTouched()){
 					block.smileyIntersect();
@@ -79,13 +71,12 @@ public class BlockManager {
 		}
 		return false;
 	}
-	public boolean checkForBulletCollision(Bounds boundaries){
+	public boolean checkForBulletCollision(Bullet bullet){
 		for(Block block : blocks){
 			//checks for bullet collision
-			if(block.intersects(boundaries)&&Bullet.isActive()){
-				//block.setColorRed(); //set block color red
+			if(block.intersects(bullet.getBounds())&&bullet.isActive()){//TODO:TAKE OUT THE IS ACTIVE PART SOMEHOW
 				// update score if block hasn't been touched yet
-				block.bulletIntersect();
+				block.bulletIntersect(bullet);
 			}
 			
 		}

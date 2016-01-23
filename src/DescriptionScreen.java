@@ -1,23 +1,18 @@
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 public class DescriptionScreen {
 	private int level;
-    private Stage s;
     private Scene myScene;
-	
-	public DescriptionScreen(Stage stage, int l){
-		s = stage;
+    private UIController myUI;
+    private GameController myGC;
+
+	public DescriptionScreen(GameController gc, UIController ui, int l){
 		level = l;
-    	Scene descripscene = init(Main.WIDTH, Main.HEIGHT);
-    	s.setScene(descripscene);
-    	s.show();
+		myUI = ui;
+		myGC = gc;
 	}
 	public Scene init(int width, int height)
 	{
@@ -28,26 +23,9 @@ public class DescriptionScreen {
         myScene = new Scene(root, width, height, Color.WHITE);
         
         //write text depending on the level
-        
-        Image caveicon = new Image(getClass().getClassLoader().getResourceAsStream("caveBackGround3.jpg"));
-        ImageView caveImage = new ImageView(caveicon);
-        caveImage.setX(0);
-        caveImage.setY(0);
-        root.getChildren().add(caveImage);
-        
-        Text descripText = new Text();
-        descripText.setX(190);
-        descripText.setY(100);
-        descripText.setText(levelText());
-        descripText.setFill(Color.WHITE);
-        root.getChildren().add(descripText);
-        
-        Text remindText = new Text();
-        remindText.setX(290);
-        remindText.setY(300);
-        remindText.setFill(Color.WHITE);
-        remindText.setText("Press <ENTER> to begin the round.");
-        root.getChildren().add(remindText);
+        myUI.setCaveBackGround(root);
+        myUI.writeStaticWhiteText(root,levelText(),190,100);
+        myUI.writeStaticWhiteText(root,"Press <ENTER> to begin the round.",290,300);
         
         myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
         return myScene;
@@ -74,7 +52,7 @@ public class DescriptionScreen {
     private void handleKeyInput (KeyCode code) {
         switch (code) {
         case ENTER: //begins the level
-        	StartMenu.startGame(level);
+        	myGC.switchScene(GameController.GAME, level);
         	break;
         default:
             // do nothing
