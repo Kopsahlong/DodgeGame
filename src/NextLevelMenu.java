@@ -11,12 +11,10 @@ public class NextLevelMenu {
 	private Scene myScene;
 	private Group root;
 	private UIController myUI;
-    private GameController myGC;
 
-	public NextLevelMenu(GameController gc, UIController ui, int l){
+	public NextLevelMenu(UIController ui, int l){
 		myUI = ui;
 		level = l;
-		myGC = gc;
 	}
 	public Scene init(int width, int height){
         // Create a scene graph to organize the scene
@@ -26,7 +24,9 @@ public class NextLevelMenu {
         myScene = new Scene(root, width, height, Color.WHITE);
         
       //create objects
-        
+        if(level==HIGHEST_LEVEL){myUI.setEscapeBackGround(root);}
+        else{myUI.setCaveBackGround(root);}
+        	
         myUI.makeImage(root, 270, 30, "WinningDisplay.png");
         
         Text winningText = new Text();

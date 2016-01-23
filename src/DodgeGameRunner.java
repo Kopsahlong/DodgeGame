@@ -9,13 +9,12 @@ import javafx.scene.paint.Color;
  * @author Robert C. Duvall
  */
 class DodgeGameRunner {
-    public static final String TITLE = "Dodge Game";
     public static final int KEY_INPUT_SPEED = 15;
     private int entrywidth = 100;
     private int midpoint = Main.HEIGHT/2;
     private Smiley myCharacter;
     private int level;
-    private static final int[] winningScore = {75,100};//winning scores for each level
+    private static final int[] winningScore = {3,2};//winning scores for each level
     private BlockManager block_manage;
     private StatsDisplay stats;
     private Group root;
@@ -27,12 +26,6 @@ class DodgeGameRunner {
     	level = l;
     	myUI = ui;
     	myGC = gc;
-    }
-    /**
-     * Returns name of the game.
-     */
-    public String getTitle () {
-        return TITLE;
     }
 
     /**
@@ -79,7 +72,7 @@ class DodgeGameRunner {
         block_manage.removeUneededBlocks();
     }
 	private void calculateBlockParameters() {
-		int tempentrywidth = Main.HEIGHT/3 + 10 + (int)(Math.random() * 200);//TODO: CHANGE TO DIVIDE BY 3 
+		int tempentrywidth = Main.HEIGHT/3 + 10 + (int)(Math.random() * 200);
     	int tempmidpoint = Main.HEIGHT/2 + (int)(Math.random() * 100)*(int)Math.pow(-1,(int)(Math.random()*2)); 
     	while(Math.abs((tempmidpoint-tempentrywidth/2)-(midpoint+entrywidth/2))<100||Math.abs((tempmidpoint+tempentrywidth/2)-(midpoint-entrywidth/2))<100){
     		tempmidpoint = Main.HEIGHT/2 + (int)(Math.random() * 100)*(int)Math.pow(-1,(int)(Math.random()*2)); 

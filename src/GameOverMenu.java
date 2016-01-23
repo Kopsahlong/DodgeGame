@@ -5,17 +5,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 class GameOverMenu {
-    public static final String TITLE = "Game Over!";
     public static final int KEY_INPUT_SPEED = 15;
     private Scene myScene;
     private int score;
     private Group root;
     private UIController myUI;
-    private GameController myGC;
 
-    public GameOverMenu(GameController gc, UIController ui, int finalScoreNum){
+    public GameOverMenu(UIController ui, int finalScoreNum){
     	myUI = ui;
-    	myGC = gc;
     	score = finalScoreNum;
     }
     /**
@@ -27,7 +24,7 @@ class GameOverMenu {
         
         // Create a place to see the shapes
         myScene = new Scene(root, width, height, Color.WHITE);
-        
+        myUI.setCaveBackGround(root);
         //create objects
         myUI.makeImage(root, Main.WIDTH/2-110, Main.HEIGHT/2-160, "HaloEmojiDisplay.png");
         

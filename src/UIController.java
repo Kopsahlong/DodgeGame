@@ -78,4 +78,11 @@ public class UIController {
         caveImage.setY(0);
         root.getChildren().add(caveImage);
 	}
+	public void setEscapeBackGround(Group root){
+		Image caveicon = new Image("../images/meadow2.jpg");
+        ImageView caveImage = new ImageView(caveicon);
+        caveImage.setX(0);
+        caveImage.setY(0);
+        root.getChildren().add(caveImage);
+	}
 }

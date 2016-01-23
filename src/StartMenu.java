@@ -12,20 +12,13 @@ import javafx.scene.paint.Color;
 
 
 class StartMenu {
-    public static final String TITLE = "Dodge Game";
     private static final int BUTTON_WIDTH = 148;
     private static final int BUTTON_HEIGHT = 20;
     private Group root;
     private Scene myScene;
-    private GameController myGC; //TODO: COME BACK AND FIX THIS STATIC THING
+    private GameController myGC;
     public StartMenu(GameController gc){
     	myGC = gc;
-    }
-    /**
-     * Returns name of the game.
-     */
-    public String getTitle () {
-        return TITLE;
     }
 
     /**
@@ -42,9 +35,9 @@ class StartMenu {
         Image logoicon = new Image(getClass().getClassLoader().getResourceAsStream("cavedodgelogo2.png"));
         ImageView myLogo = new ImageView(logoicon);
         
-        Button btn1 = makeButton("Start Level 1", GameController.DESCRIP,1);
-        Button btn2 = makeButton("Start Level 2", GameController.DESCRIP,2);
-        Button btn3 = makeButton("Customize Character", GameController.CHOOSE_CHAR,-1);
+        Button btn1 = makeSizedButton("Start Level 1", GameController.DESCRIP,1);
+        Button btn2 = makeSizedButton("Start Level 2", GameController.DESCRIP,2);
+        Button btn3 = makeSizedButton("Customize Character", GameController.CHOOSE_CHAR,-1);
 
         putItemsInGrid(myLogo, btn1, btn2, btn3);
         
@@ -66,7 +59,8 @@ class StartMenu {
         myScene.setRoot(gridpane);
         gridpane.setStyle("-fx-background-image: url('../images/caveBackGround3.jpg')");
 	}
-    public Button makeButton(String text, String type, int level){
+	//not using ui controller for this bc this method is unique to the start menu class
+    public Button makeSizedButton(String text, String type, int level){
     	Button btn = new Button(text);
 		btn.setOnAction(new EventHandler<ActionEvent>() { 
         	public void handle(ActionEvent event){
@@ -76,13 +70,4 @@ class StartMenu {
         btn.setPrefSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 		return btn;
 	}
-    public void openDescripScreen(int level){
-    	myGC.switchScene(GameController.DESCRIP,level);
-    }
-    public void customizeCharacter(){
-    	myGC.switchScene(GameController.CHOOSE_CHAR,-1);
-    }
-    public void startGame(int level){
-    	myGC.switchScene(GameController.GAME,level);
-    }
 }

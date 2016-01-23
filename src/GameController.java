@@ -4,7 +4,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GameController {
-    public static final String TITLE = "Dodge Game";
     public static final int KEY_INPUT_SPEED = 15;
     public static final int FRAMES_PER_SECOND = 90; //60
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -12,8 +11,7 @@ public class GameController {
     public static final double BLOCK_FRAMES_PER_SECOND = 2.5; //60
     private static final double BLOCK_MILLISECOND_DELAY = 1000 / BLOCK_FRAMES_PER_SECOND;
     private static final double BLOCK_SECOND_DELAY = 1.0 / BLOCK_FRAMES_PER_SECOND;
-    private static Stage s;
-   
+    
     public static final String GAME = "game";
     public static final String START = "start";
     public static final String NEXT_LEVEL = "next level";
@@ -32,7 +30,8 @@ public class GameController {
     private Timeline animationBlock;
     private KeyFrame frame;
     private KeyFrame frameBlock;
-	
+    private Stage s;
+
 	public GameController(Stage stage){
 		s = stage;
 	}
@@ -49,11 +48,11 @@ public class GameController {
 		        s.setScene(myStartMenu.init(Main.WIDTH, Main.HEIGHT));
 				break;
 			case NEXT_LEVEL:
-				myNextLevelMenu = new NextLevelMenu(this, new UIController(this),level);	
+				myNextLevelMenu = new NextLevelMenu(new UIController(this),level);	
 		        s.setScene(myNextLevelMenu.init(Main.WIDTH, Main.HEIGHT));
 				break;
 			case GAME_OVER:
-				myGameOverMenu = new GameOverMenu(this, new UIController(this),myGame.getScore());
+				myGameOverMenu = new GameOverMenu(new UIController(this),myGame.getScore());
 		        s.setScene(myGameOverMenu.init(Main.WIDTH, Main.HEIGHT));
 				break;
 			case DESCRIP:
