@@ -14,7 +14,7 @@ class DodgeGameRunner {
     private int midpoint = Main.HEIGHT/2;
     private Smiley myCharacter;
     private int level;
-    private static final int[] winningScore = {3,2};//winning scores for each level
+    private static final int[] winningScore = {75,100};//winning scores for each level
     private BlockManager block_manage;
     private StatsDisplay stats;
     private Group root;
